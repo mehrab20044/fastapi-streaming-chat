@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Streaming Chat</title>
+</head>
+<body>
+
+    <h2>FastAPI Streaming Chat</h2>
+
+    <input id="message" placeholder="پیامت را بنویس">
+    <button onclick="sendMessage()">ارسال</button>
+
+    <p id="answer"></p>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            const answer = document.getElementById("answer");
+
+            answer.textContent = "";
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            let buffer = "";
+
+            while (true) {
+                const { value, done } = await reader.read();
+
+                if (done) {
+                    break;
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+
+                const events = buffer.split("\n\n");
+                buffer = events.pop();
+
+                for (const event of events) {
+                    if (!event.startsWith("data: ")) {
+                        continue;
+                    }
+
+                    const data = event.replace("data: ", "");
+                    const parsed = JSON.parse(data);
+
+                    if (parsed.content) {
+                        answer.textContent += parsed.content;
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

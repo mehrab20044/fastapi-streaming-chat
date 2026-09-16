@@ -5,7 +5,7 @@
 ## Progress
 
 - Day 16 ✅ SSE and StreamingResponse
-- Day 17 ⏳ LLM Streaming
+- Day 17 ✅ LLM Streaming
 - Day 18 ⏳ Redis and Cache
 - Day 19 ⏳ Benchmarking
 - Day 20 ⏳ Context Management
@@ -21,6 +21,17 @@
 - `text/event-stream`
 - Client disconnect handling
 - `asyncio.CancelledError`
+
+
+## Day 17
+
+- Real LLM streaming with ToGPT
+- Async streaming with `httpx`
+- SSE chunk forwarding
+- `system` and `user` messages
+- Stream error handling
+- Time To First Chunk measurement
+- Simple HTML streaming chat client
 
 ## Run
 
